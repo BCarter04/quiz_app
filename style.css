@@ -50,6 +50,7 @@ body{
 .btn:disabled{
     cursor: no-drop;
 }
+
 #next-btn{
     background: #001e4d;
     color: #fff;

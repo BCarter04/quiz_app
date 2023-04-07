@@ -47,17 +47,17 @@ const questions = [        // array of questions
 ];
 
 const questionElement = document.getElementById("question");
-const answerButtons = document.getElementById("answer-questions");
+const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
 
 let currentQuestionIndex = 0;
 let score = 0;
 
 function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    nextButton.innerHTML = "Next";
-    showQuestion();
+    currentQuestionIndex = 0;        // question reset
+    score = 0;                       // score reset
+    nextButton.innerHTML = "Next";   // change button text to restart
+    showQuestion();            // show question
 }
 
 function showQuestion() {         // display questions
@@ -66,62 +66,62 @@ function showQuestion() {         // display questions
     let questionNo = currentQuestionIndex + 1;
     questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
 
-    currentQuestion.answers.forEach(answer => {       //display answers
-        const button = document.createElement("button");
-        button.innerText = answer.text;
-        button.classList.add("btn");
+    currentQuestion.answers.forEach(answer => {             //display answers
+        const button = document.createElement("button");   // create button tag and save in button
+        button.innerHTML = answer.text;                     // add text to button
+        button.classList.add("btn");                        // add button
         answerButtons.appendChild(button);
         if (answer.correct) {
-            button.dataset.correct = answer.correct;
+            button.dataset.correct = answer.correct;   // add correct class to button
         }
-        button.addEventListener("click", selectAnswer);
+        button.addEventListener("click", selectAnswer);     // add event listener to button to call selectAnswer
     })
 }
 
 
-function resetState() {                //remove all previous answers
-    nextButton.style.display = "none";
-    while(answerButtons.firstChild){
-        answerButtons.removeChild(answerButtons.firstChild);
+function resetState() {                
+    nextButton.style.display = "none";     // hide next button
+    while(answerButtons.firstChild){       //remove all previous buttons
+        answerButtons.removeChild(answerButtons.firstChild); //remove all previous answers
     }
 }
 
 function selectAnswer(e) {
-    const selectedBtn = e.target;
-    const isCorrect = selectedBtn.dataset.correct === "true";
+    const selectedBtn = e.target;        // get button that was clicked
+    const isCorrect = selectedBtn.dataset.correct === "true";  // get correct answer
     if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        score++;
+        selectedBtn.classList.add("correct");   // add correct class to button
+        score++;                                // increment score
     }else{
-        selectedBtn.classList.add("incorrect");
+        selectedBtn.classList.add("incorrect");   // add incorrect class to button
     }
     Array.from(answerButtons.children).forEach(button => {
-        if(button.dataset.correct === "true"){
-            button.classList.add("correct");
+        if(button.dataset.correct === "true"){        // check if button is correct for each data set
+            button.classList.add("correct");        // add correct class to button green color
         }
-        button.disabled = true;
+        button.disabled = true;          // disable button after click
     });
-    nextButton.style.display = "block";    
+    nextButton.style.display = "block";       // show next button
 }
 function showScore(){
-    resetState();
-    questionElement.innerHTML = 'you scored ${score} out of ${questions.length} questions!';
-    nextButton.innerHTML = "Play Again";
-    nextButton.style.display = "block";
+    resetState();                 //remove all previous questions and answers
+    questionElement.innerHTML = `You scored ${score} out of ${questions.length} questions!`;   // display score
+    nextButton.innerHTML = "Play Again";                                                       // change button text to restart
+    nextButton.style.display = "block";       // show play again button to restart quiz
 }
-function handleNextQuestion(){
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-        showQuestion();
+function handleNextButton(){    // handle next button
+    currentQuestionIndex++;    // increment question index
+    if (currentQuestionIndex < questions.length) {   // handle next question
+        showQuestion();      // show next question if there are more questions
     }else{
-        showScore();
+        showScore();     // show final score
     }
 }
-nextButton.addEventListener("click", () => {
-    if (currentQuestionIndex < questions.length - 1) {
-        handleNextQuestion();
+nextButton.addEventListener("click", () => {         // handle next button click
+    if (currentQuestionIndex < questions.length) {   // handle next question to check if it is full or not
+        handleNextButton();        // handle button to next question
     }else{
-        startQuiz();
+        startQuiz();     // if no more question it should resart the quiz
     }
 });
 
